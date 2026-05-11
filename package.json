@@ -1,7 +1,7 @@
 {
-  "name": "js-template",
+  "name": "el-secreto-de-la-lagartija",
   "version": "1.0.0",
-  "description": "Template moderno para proyectos HTML, CSS y JavaScript con Tailwind CSS.",
+  "description": "Juego web de acertijos numéricos inspirado en el antiguo Egipto.",
   "type": "module",
   "private": false,
   "scripts": {
@@ -18,8 +18,8 @@
     "javascript",
     "tailwindcss",
     "vite",
-    "template",
-    "frontend"
+    "game",
+    "riddles"
   ],
   "author": "Jorge Alonso",
   "license": "MIT",
