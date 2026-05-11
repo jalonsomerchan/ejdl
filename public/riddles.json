@@ -1,0 +1,44 @@
+{
+  "prize": {
+    "title": "Has encontrado el secreto de la lagartija",
+    "text": "La lagartija dorada custodiaba una última pista: la paciencia, la lógica y la curiosidad abren cualquier puerta del templo. Premio desbloqueado."
+  },
+  "levels": [
+    {
+      "id": "camara-1",
+      "title": "La puerta de piedra",
+      "question": "Tengo 3 monedas y encuentro 4 más. ¿Cuántas monedas tengo ahora?",
+      "answer": 7
+    },
+    {
+      "id": "camara-2",
+      "title": "El eco del pasillo",
+      "question": "Si una caja tiene 5 filas con 6 piedras en cada fila, ¿cuántas piedras hay en total?",
+      "answer": 30
+    },
+    {
+      "id": "camara-3",
+      "title": "La balanza silenciosa",
+      "question": "Un número multiplicado por 4 da 28. ¿Cuál es ese número?",
+      "answer": 7
+    },
+    {
+      "id": "camara-4",
+      "title": "La sala de las antorchas",
+      "question": "Hay 18 antorchas encendidas y se apagan 5. ¿Cuántas siguen encendidas?",
+      "answer": 13
+    },
+    {
+      "id": "camara-5",
+      "title": "El puente de arena",
+      "question": "Si avanzas 12 pasos, retrocedes 4 y vuelves a avanzar 9, ¿a cuántos pasos del inicio estás?",
+      "answer": 17
+    },
+    {
+      "id": "camara-6",
+      "title": "La cámara de la lagartija",
+      "question": "Pienso un número. Le sumo 15 y obtengo 42. ¿Qué número pensé?",
+      "answer": 27
+    }
+  ]
+}
