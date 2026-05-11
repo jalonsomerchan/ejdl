@@ -5,12 +5,14 @@
   --papyrus: #f4d48a;
   --sand: #d89b43;
   --gold: #ffcc52;
+  --gold-strong: #ffe98e;
   --dark-gold: #8a5a14;
   --lapis: #142f5f;
   --deep: #120b08;
   --ruby: #9e2a2b;
   --emerald: #1b6f5a;
   --ink: #2a1608;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 * {
@@ -19,18 +21,22 @@
 
 html {
   min-height: 100%;
+  background: #070302;
 }
 
 body {
   min-height: 100vh;
+  min-height: 100svh;
   margin: 0;
   font-family: Inter, ui-sans-serif, system-ui, sans-serif;
   color: var(--papyrus);
   background:
-    radial-gradient(circle at 50% 18%, rgba(255, 204, 82, 0.23), transparent 20rem),
+    radial-gradient(circle at 50% 10%, rgba(255, 204, 82, 0.32), transparent 18rem),
+    radial-gradient(circle at 12% 78%, rgba(158, 42, 43, 0.2), transparent 16rem),
+    radial-gradient(circle at 88% 74%, rgba(20, 47, 95, 0.33), transparent 17rem),
     linear-gradient(135deg, rgba(20, 47, 95, 0.45), transparent 32%),
     repeating-linear-gradient(90deg, rgba(255, 204, 82, 0.08) 0 1px, transparent 1px 88px),
-    linear-gradient(180deg, #271005 0%, #100704 48%, #070302 100%);
+    linear-gradient(180deg, #2c1206 0%, #100704 48%, #070302 100%);
   overflow-x: hidden;
 }
 
@@ -38,15 +44,15 @@ body::before,
 body::after {
   position: fixed;
   inset: 0 auto 0 0;
-  z-index: -1;
-  width: clamp(3rem, 8vw, 7rem);
+  z-index: -2;
+  width: clamp(2.4rem, 7vw, 7rem);
   content: '';
   background:
     repeating-linear-gradient(
       180deg,
-      rgba(255, 204, 82, 0.18) 0 1.3rem,
+      rgba(255, 204, 82, 0.2) 0 1.3rem,
       rgba(158, 42, 43, 0.18) 1.3rem 2.6rem,
-      rgba(20, 47, 95, 0.18) 2.6rem 3.9rem
+      rgba(20, 47, 95, 0.22) 2.6rem 3.9rem
     ),
     linear-gradient(90deg, rgba(0, 0, 0, 0.45), transparent);
   opacity: 0.75;
@@ -60,33 +66,63 @@ body::after {
 
 button {
   font: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.sand-layer {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.sand-layer span {
+  position: absolute;
+  top: -1rem;
+  left: var(--x);
+  width: var(--size);
+  height: var(--size);
+  border-radius: 999px;
+  background: rgba(255, 220, 138, 0.82);
+  box-shadow: 0 0 0.8rem rgba(255, 204, 82, 0.45);
+  filter: blur(0.2px);
+  animation: sand-fall var(--duration) linear infinite;
+  animation-delay: var(--delay);
 }
 
 .game-shell {
   display: grid;
   min-height: 100vh;
+  min-height: 100svh;
   place-items: center;
-  padding: clamp(1rem, 3vw, 2rem);
+  padding: clamp(0.75rem, 3vw, 2rem);
+  padding-bottom: calc(clamp(0.75rem, 3vw, 2rem) + var(--safe-bottom));
+  perspective: 1200px;
 }
 
 .hero-screen,
 .temple-card {
-  width: min(100%, 52rem);
+  width: min(100%, 55rem);
 }
 
 .egyptian-frame,
 .temple-card {
   position: relative;
+  isolation: isolate;
   overflow: hidden;
   border: 3px solid var(--gold);
-  border-radius: 2rem;
+  border-radius: clamp(1.25rem, 4vw, 2.2rem);
   background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.08), transparent 32%),
+    radial-gradient(circle at 50% 0%, rgba(255, 204, 82, 0.18), transparent 36%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent 32%),
     linear-gradient(180deg, rgba(42, 22, 8, 0.96), rgba(16, 7, 4, 0.98));
   box-shadow:
     0 1.25rem 5rem rgba(0, 0, 0, 0.58),
+    0 0 3.5rem rgba(255, 204, 82, 0.14),
     inset 0 0 0 0.45rem rgba(138, 90, 20, 0.34),
     inset 0 0 2.5rem rgba(255, 204, 82, 0.12);
+  transform-style: preserve-3d;
 }
 
 .egyptian-frame::before,
@@ -104,30 +140,50 @@ button {
   white-space: nowrap;
 }
 
+.egyptian-frame::after,
+.temple-card::after {
+  position: absolute;
+  inset: -42%;
+  z-index: -1;
+  content: '';
+  background: conic-gradient(
+    from 0deg,
+    transparent,
+    rgba(255, 204, 82, 0.16),
+    transparent,
+    rgba(20, 47, 95, 0.22),
+    transparent
+  );
+  animation: temple-aura 12s linear infinite;
+}
+
 .egyptian-frame {
-  padding: clamp(2rem, 8vw, 5rem);
+  padding: clamp(1.45rem, 8vw, 5rem);
   text-align: center;
 }
 
 .sun-disc {
   display: grid;
-  width: 6rem;
-  height: 6rem;
+  width: clamp(4.8rem, 20vw, 6.8rem);
+  height: clamp(4.8rem, 20vw, 6.8rem);
   margin: 0 auto 1rem;
   place-items: center;
-  border: 3px solid rgba(255, 204, 82, 0.8);
+  border: 3px solid rgba(255, 204, 82, 0.86);
   border-radius: 999px;
   color: var(--gold);
-  background: radial-gradient(circle, rgba(255, 204, 82, 0.3), rgba(216, 155, 67, 0.04));
-  font-size: 3rem;
-  box-shadow: 0 0 2.5rem rgba(255, 204, 82, 0.34);
+  background:
+    radial-gradient(circle, rgba(255, 244, 183, 0.38), transparent 36%),
+    radial-gradient(circle, rgba(255, 204, 82, 0.3), rgba(216, 155, 67, 0.04));
+  font-size: clamp(2.45rem, 10vw, 3.6rem);
+  box-shadow: 0 0 2.5rem rgba(255, 204, 82, 0.48);
+  animation: sun-pulse 2.6s ease-in-out infinite;
 }
 
 .eyebrow {
   margin: 0 0 0.5rem;
   color: var(--gold);
   font-family: Cinzel, serif;
-  font-size: 0.78rem;
+  font-size: clamp(0.68rem, 2vw, 0.78rem);
   font-weight: 900;
   letter-spacing: 0.22em;
   text-transform: uppercase;
@@ -141,7 +197,7 @@ h2 {
 }
 
 h1 {
-  font-size: clamp(2.6rem, 10vw, 5.7rem);
+  font-size: clamp(2.25rem, 12vw, 5.7rem);
   font-weight: 900;
   line-height: 0.95;
   text-shadow: 0 0.25rem 0 var(--dark-gold), 0 1rem 2rem rgba(0, 0, 0, 0.45);
@@ -149,7 +205,7 @@ h1 {
 
 h2 {
   color: #ffe4a0;
-  font-size: clamp(1.75rem, 5vw, 3rem);
+  font-size: clamp(1.55rem, 7vw, 3rem);
   line-height: 1.02;
 }
 
@@ -157,7 +213,7 @@ h2 {
   max-width: 42rem;
   margin: 1.5rem auto 0;
   color: #f7dca0;
-  font-size: clamp(1rem, 2.4vw, 1.18rem);
+  font-size: clamp(0.98rem, 3.7vw, 1.18rem);
   line-height: 1.75;
 }
 
@@ -173,28 +229,43 @@ h2 {
 .primary-button,
 .secondary-button,
 .numeric-keypad button {
-  min-height: 3.25rem;
+  min-height: 3.35rem;
   border: 2px solid rgba(255, 204, 82, 0.75);
   border-radius: 999px;
   cursor: pointer;
   font-weight: 900;
+  touch-action: manipulation;
   transition:
     transform 0.16s ease,
     filter 0.16s ease,
+    box-shadow 0.16s ease,
     background 0.16s ease;
 }
 
 .primary-button {
+  position: relative;
+  overflow: hidden;
   padding: 0.95rem 1.5rem;
   color: var(--ink);
-  background: linear-gradient(180deg, #ffe6a1, #f5b740 55%, #b56f16);
+  background: linear-gradient(180deg, #fff1b8, #f5b740 55%, #b56f16);
   box-shadow: 0 0.65rem 0 rgba(90, 52, 7, 0.8), 0 1rem 2rem rgba(0, 0, 0, 0.3);
+}
+
+.primary-button::after {
+  position: absolute;
+  inset: -45% auto -45% -60%;
+  width: 42%;
+  content: '';
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.65), transparent);
+  transform: rotate(18deg);
+  animation: button-shine 3.5s ease-in-out infinite;
 }
 
 .secondary-button {
   padding: 0.9rem 1.35rem;
   color: #ffe4a0;
-  background: rgba(20, 47, 95, 0.5);
+  background: rgba(20, 47, 95, 0.58);
+  box-shadow: inset 0 0 1.2rem rgba(255, 204, 82, 0.05);
 }
 
 .secondary-button:disabled {
@@ -206,14 +277,14 @@ h2 {
 .primary-button:hover:not(:disabled),
 .secondary-button:hover:not(:disabled),
 .numeric-keypad button:hover {
-  transform: translateY(-2px);
+  transform: translateY(-2px) scale(1.01);
   filter: brightness(1.08);
 }
 
 .primary-button:active,
 .secondary-button:active,
 .numeric-keypad button:active {
-  transform: translateY(2px);
+  transform: translateY(2px) scale(0.98);
 }
 
 .full {
@@ -221,7 +292,7 @@ h2 {
 }
 
 .temple-card {
-  padding: clamp(1.25rem, 4vw, 2.5rem);
+  padding: clamp(1rem, 4vw, 2.5rem);
 }
 
 .game-header {
@@ -242,6 +313,11 @@ h2 {
   border-radius: 999px;
   color: var(--gold);
   background: rgba(18, 11, 8, 0.7);
+  box-shadow: 0 0 1.5rem rgba(255, 204, 82, 0.08);
+}
+
+.scarab-badge span {
+  animation: scarab-float 2s ease-in-out infinite;
 }
 
 .level-track {
@@ -261,12 +337,16 @@ h2 {
   color: rgba(244, 212, 138, 0.72);
   background: rgba(0, 0, 0, 0.25);
   font-weight: 900;
+  opacity: 0;
+  transform: translateY(0.45rem) scale(0.9);
+  animation: dot-reveal 0.46s ease forwards;
+  animation-delay: var(--step-delay, 0ms);
 }
 
 .level-dot.is-solved {
   border-color: rgba(27, 111, 90, 0.95);
   color: white;
-  background: var(--emerald);
+  background: linear-gradient(180deg, #26a982, var(--emerald));
 }
 
 .level-dot.is-current {
@@ -274,12 +354,13 @@ h2 {
   color: var(--ink);
   background: var(--gold);
   box-shadow: 0 0 1rem rgba(255, 204, 82, 0.55);
+  animation: dot-reveal 0.46s ease forwards, current-orb 1.4s ease-in-out infinite 0.46s;
 }
 
 .riddle-panel {
   position: relative;
-  min-height: 12rem;
-  padding: clamp(1.35rem, 4vw, 2rem);
+  min-height: clamp(9.5rem, 28svh, 12rem);
+  padding: clamp(1.15rem, 4vw, 2rem);
   border: 2px solid rgba(138, 90, 20, 0.9);
   border-radius: 1.4rem;
   color: var(--ink);
@@ -288,7 +369,7 @@ h2 {
     linear-gradient(0deg, rgba(138, 90, 20, 0.1) 1px, transparent 1px),
     linear-gradient(180deg, #ffe8ad, #e7b965);
   background-size: 26px 26px, 26px 26px, auto;
-  box-shadow: inset 0 0 2.5rem rgba(84, 44, 8, 0.25);
+  box-shadow: inset 0 0 2.5rem rgba(84, 44, 8, 0.25), 0 1rem 2rem rgba(0, 0, 0, 0.2);
 }
 
 .corner-glyph {
@@ -297,6 +378,7 @@ h2 {
   right: 1rem;
   color: rgba(42, 22, 8, 0.22);
   font-size: 2.4rem;
+  animation: glyph-spin 8s linear infinite;
 }
 
 .lizard-mark {
@@ -309,11 +391,12 @@ h2 {
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.24);
   font-size: 1.85rem;
+  animation: lizard-peek 3s ease-in-out infinite;
 }
 
 .riddle-panel p {
   margin: 0;
-  font-size: clamp(1.15rem, 3vw, 1.6rem);
+  font-size: clamp(1.05rem, 4.8vw, 1.6rem);
   font-weight: 800;
   line-height: 1.45;
 }
@@ -337,27 +420,31 @@ h2 {
   color: var(--gold);
   background: rgba(0, 0, 0, 0.42);
   font-family: Cinzel, serif;
-  font-size: 2.15rem;
+  font-size: clamp(1.75rem, 8vw, 2.15rem);
   font-weight: 900;
   letter-spacing: 0.12em;
   text-align: center;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .numeric-keypad {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.7rem;
+  gap: clamp(0.45rem, 2vw, 0.7rem);
 }
 
 .numeric-keypad button {
-  border-radius: 1rem;
+  min-height: clamp(3.25rem, 12.5vw, 4.15rem);
+  border-radius: clamp(0.85rem, 3vw, 1rem);
   color: #ffe6a1;
   background:
-    linear-gradient(180deg, rgba(20, 47, 95, 0.82), rgba(10, 22, 45, 0.92)),
+    linear-gradient(180deg, rgba(26, 61, 121, 0.94), rgba(8, 18, 38, 0.96)),
     var(--lapis);
   font-family: Cinzel, serif;
-  font-size: 1.35rem;
-  box-shadow: inset 0 -0.25rem 0 rgba(0, 0, 0, 0.26);
+  font-size: clamp(1.2rem, 5vw, 1.5rem);
+  box-shadow:
+    inset 0 -0.25rem 0 rgba(0, 0, 0, 0.28),
+    0 0.65rem 1.2rem rgba(0, 0, 0, 0.18);
 }
 
 .feedback {
@@ -369,6 +456,7 @@ h2 {
 
 .feedback[data-type='success'] {
   color: #6ff0b9;
+  text-shadow: 0 0 1.2rem rgba(111, 240, 185, 0.55);
 }
 
 .feedback[data-type='error'] {
@@ -385,15 +473,16 @@ h2 {
 
 .treasure {
   color: var(--gold);
-  font-size: clamp(4rem, 14vw, 8rem);
+  font-size: clamp(4rem, 20vw, 8rem);
   text-shadow: 0 0 2rem rgba(255, 204, 82, 0.7);
+  animation: prize-orbit 2.4s ease-in-out infinite;
 }
 
 .prize-screen p:not(.eyebrow) {
   max-width: 38rem;
   margin: 1rem auto 2rem;
   color: #f7dca0;
-  font-size: 1.15rem;
+  font-size: clamp(1rem, 4vw, 1.15rem);
   line-height: 1.7;
 }
 
@@ -401,17 +490,322 @@ h2 {
   display: none !important;
 }
 
-@media (max-width: 560px) {
+.is-screen-entering {
+  animation: screen-enter 0.74s cubic-bezier(0.19, 1, 0.22, 1) both;
+}
+
+.temple-card.is-level-entering .riddle-panel,
+.temple-card.is-level-entering .answer-area,
+.temple-card.is-level-entering .game-header {
+  animation: level-enter 0.56s cubic-bezier(0.19, 1, 0.22, 1) both;
+}
+
+.temple-card.is-level-entering .answer-area {
+  animation-delay: 0.08s;
+}
+
+.temple-card.is-wrong {
+  animation: temple-shake 0.44s ease-in-out both;
+}
+
+.temple-card.is-wrong .riddle-panel {
+  box-shadow: inset 0 0 2.5rem rgba(84, 44, 8, 0.25), 0 0 2rem rgba(255, 80, 80, 0.2);
+}
+
+.temple-card.is-unlocked .riddle-panel {
+  animation: unlock-panel 0.66s ease both;
+}
+
+.is-typing {
+  animation: answer-pop 0.18s ease both;
+}
+
+.is-success {
+  border-color: #6ff0b9;
+  box-shadow: 0 0 1.6rem rgba(111, 240, 185, 0.38);
+  animation: answer-success 0.52s ease both;
+}
+
+.is-error,
+.is-warning {
+  border-color: #ff9a8d;
+  box-shadow: 0 0 1.3rem rgba(255, 154, 141, 0.28);
+}
+
+.is-visible-now {
+  animation: feedback-rise 0.32s ease both;
+}
+
+.is-prize-revealed {
+  animation: prize-reveal 1s cubic-bezier(0.19, 1, 0.22, 1) both;
+}
+
+@keyframes sand-fall {
+  0% {
+    transform: translate3d(0, -2rem, 0);
+    opacity: 0;
+  }
+  12% {
+    opacity: 0.82;
+  }
+  100% {
+    transform: translate3d(var(--drift), 105vh, 0);
+    opacity: 0;
+  }
+}
+
+@keyframes temple-aura {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+@keyframes sun-pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 2.5rem rgba(255, 204, 82, 0.42);
+  }
+  50% {
+    transform: scale(1.045);
+    box-shadow: 0 0 4rem rgba(255, 204, 82, 0.62);
+  }
+}
+
+@keyframes button-shine {
+  0%, 38% {
+    transform: translateX(0) rotate(18deg);
+  }
+  72%, 100% {
+    transform: translateX(430%) rotate(18deg);
+  }
+}
+
+@keyframes scarab-float {
+  0%, 100% {
+    transform: translateY(0) rotate(-5deg);
+  }
+  50% {
+    transform: translateY(-0.25rem) rotate(6deg);
+  }
+}
+
+@keyframes dot-reveal {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes current-orb {
+  0%, 100% {
+    box-shadow: 0 0 1rem rgba(255, 204, 82, 0.55);
+  }
+  50% {
+    box-shadow: 0 0 2.1rem rgba(255, 204, 82, 0.95);
+  }
+}
+
+@keyframes glyph-spin {
+  0%, 80%, 100% {
+    transform: rotate(0deg) scale(1);
+  }
+  90% {
+    transform: rotate(12deg) scale(1.06);
+  }
+}
+
+@keyframes lizard-peek {
+  0%, 100% {
+    transform: translateX(0) rotate(0deg);
+  }
+  40% {
+    transform: translateX(0.22rem) rotate(4deg);
+  }
+  52% {
+    transform: translateX(-0.15rem) rotate(-4deg);
+  }
+}
+
+@keyframes screen-enter {
+  from {
+    opacity: 0;
+    transform: translateY(1.5rem) rotateX(8deg) scale(0.96);
+    filter: blur(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) rotateX(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes level-enter {
+  from {
+    opacity: 0;
+    transform: translateY(1rem) scale(0.98);
+    filter: blur(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes temple-shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  18% {
+    transform: translateX(-0.6rem) rotate(-0.45deg);
+  }
+  38% {
+    transform: translateX(0.55rem) rotate(0.45deg);
+  }
+  58% {
+    transform: translateX(-0.35rem) rotate(-0.25deg);
+  }
+  78% {
+    transform: translateX(0.2rem) rotate(0.15deg);
+  }
+}
+
+@keyframes unlock-panel {
+  0% {
+    transform: scale(1);
+  }
+  45% {
+    transform: scale(1.02);
+    filter: brightness(1.22);
+    box-shadow: inset 0 0 2.5rem rgba(84, 44, 8, 0.25), 0 0 2.5rem rgba(255, 204, 82, 0.55);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes answer-pop {
+  50% {
+    transform: scale(1.025);
+  }
+}
+
+@keyframes answer-success {
+  0%, 100% {
+    transform: scale(1);
+  }
+  35% {
+    transform: scale(1.04);
+  }
+}
+
+@keyframes feedback-rise {
+  from {
+    opacity: 0;
+    transform: translateY(0.4rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes prize-orbit {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+    filter: drop-shadow(0 0 1rem rgba(255, 204, 82, 0.35));
+  }
+  50% {
+    transform: translateY(-0.45rem) scale(1.05);
+    filter: drop-shadow(0 0 2rem rgba(255, 204, 82, 0.75));
+  }
+}
+
+@keyframes prize-reveal {
+  0% {
+    opacity: 0;
+    transform: scale(0.88) rotateX(12deg);
+    filter: blur(10px) brightness(1.4);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotateX(0deg);
+    filter: blur(0) brightness(1);
+  }
+}
+
+@media (max-width: 720px) {
+  body::before,
+  body::after {
+    width: 1.15rem;
+    opacity: 0.42;
+  }
+
   .game-shell {
-    padding: 0.8rem;
+    align-items: start;
+    padding: 0.55rem;
+    padding-bottom: calc(0.55rem + var(--safe-bottom));
+  }
+
+  .egyptian-frame,
+  .temple-card {
+    border-width: 2px;
+    box-shadow:
+      0 0.8rem 2.2rem rgba(0, 0, 0, 0.55),
+      inset 0 0 0 0.22rem rgba(138, 90, 20, 0.34),
+      inset 0 0 2rem rgba(255, 204, 82, 0.12);
   }
 
   .game-header {
-    flex-direction: column;
+    flex-direction: row;
+    align-items: center;
   }
 
   .scarab-badge {
-    align-self: flex-start;
+    padding: 0.52rem 0.65rem;
+  }
+
+  .level-track {
+    flex-wrap: nowrap;
+    gap: 0.35rem;
+    padding: 0.1rem 0.2rem 0.35rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .level-track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .level-dot {
+    flex: 0 0 auto;
+    width: 2rem;
+    height: 2rem;
+    font-size: 0.85rem;
+  }
+
+  .riddle-panel {
+    min-height: auto;
+  }
+
+  .answer-area {
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+
+  .answer-display {
+    min-height: 3.5rem;
+  }
+
+  .footer-actions {
+    margin-top: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-actions,
+  .footer-actions {
+    width: 100%;
   }
 
   .primary-button,
@@ -419,8 +813,34 @@ h2 {
     width: 100%;
   }
 
-  .hero-actions,
-  .footer-actions {
-    width: 100%;
+  .game-header {
+    gap: 0.75rem;
+  }
+
+  .game-header h2 {
+    max-width: 11rem;
+  }
+
+  .numeric-keypad {
+    gap: 0.45rem;
+  }
+
+  .feedback {
+    font-size: 0.92rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+
+  .sand-layer {
+    display: none;
   }
 }
